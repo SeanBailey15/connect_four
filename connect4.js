@@ -92,6 +92,7 @@ class Game {
     
     if (this.checkForWin()) {
       this.gameOver = true;
+      document.getElementById('message').style.color = `${this.currPlayer.color}`;
       return this.endGame(`The ${this.currPlayer.color} player won!`);
     }
     
@@ -139,22 +140,34 @@ const startButton = document.getElementById('start-button');
 let thisGame;
 
 startButton.addEventListener('click', () => {
-  let p1 = new Player(document.getElementById('p1-color').value);
-  let p2 = new Player(document.getElementById('p2-color').value);
+  const p1Input = document.getElementById('p1-input');
+  const p1Color = document.getElementById('p1-color');
+  const p2Input = document.getElementById('p2-input');
+  const p2Color = document.getElementById('p2-color');
   const boardState = document.getElementById('board');
-  if(boardState.innerHTML === '') {
+  const letters = /^[A-Za-z]+$/;
+
+  if (boardState.innerHTML === '' &&
+  p1Color.value !== '' && p1Color.value.match(letters) &&
+  p2Color.value !== '' && p2Color.value.match(letters)) {
+
+    let p1 = new Player(document.getElementById('p1-color').value);
+    let p2 = new Player(document.getElementById('p2-color').value);
     thisGame = new Game (p1, p2, 7, 6);
     startButton.textContent = 'Restart game'
-    document.getElementById('p1-input').classList.toggle('hide');
-    document.getElementById('p2-input').classList.toggle('hide');
+    p1Input.classList.toggle('hide');
+    p2Input.classList.toggle('hide');
   }
-  else {
+  else if (p1Color.value !== '' && p1Color.value.match(letters) &&
+  p2Color.value !== '' && p2Color.value.match(letters)) {
+
     boardState.innerHTML = '';
     startButton.textContent = 'Start Game';
+    p1Input.classList.toggle('hide');
+    p2Input.classList.toggle('hide');
+    p1Color.value = '';
+    p2Color.value = '';
     document.getElementById('message').textContent = '';
-    document.getElementById('p1-input').classList.toggle('hide');
-    document.getElementById('p2-input').classList.toggle('hide');
-    document.getElementById('p1-color').value = '';
-    document.getElementById('p2-color').value = '';
+    document.getElementById('message').style.color = 'black';
   }
 });
